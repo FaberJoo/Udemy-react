@@ -30,7 +30,7 @@ const ExpenseForm = ({ onSaveExpenseData, onChangeToggleHandler }) => {
         e.preventDefault();
         const expenseData = {
             title: enteredTitle,
-            amount: enteredAmount,
+            amount: +enteredAmount,
             date: new Date(enteredDate)
         }
 
