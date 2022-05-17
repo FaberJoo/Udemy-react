@@ -4,15 +4,14 @@ import './NewExpense.css';
 
 const NewExpense = ({ onAddExpense }) => {
 
-    const SaveExpenseDataHandler = (EnteredExpenseData) => {
+    const SaveExpenseDataHandler = (enteredExpenseData) => {
         const expenseData = {
-            ...EnteredExpenseData,
+            ...enteredExpenseData,
+            date: enteredExpenseData.date,
             id: Math.random().toString()
         }
 
         onAddExpense(expenseData);
-
-        console.log(expenseData);
     }
 
 

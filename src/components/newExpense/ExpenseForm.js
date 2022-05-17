@@ -18,31 +18,26 @@ const ExpenseForm = ({ onSaveExpenseData }) => {
         //     ...precState,
         //     enteredTitle: e.target.value
         // })))
-        console.log(e.target.value);
     };
     const amountChangeHandler = (e) => {
         setEnteredAmount(e.target.value);
-        console.log(e.target.value);
     };
     const dateChangeHandler = (e) => {
         setEnteredDate(e.target.value);
-        console.log(e.target.value);
     };
 
     const submitHandler = (e) => {
         e.preventDefault();
         const expenseData = {
-            enteredTitle: enteredTitle,
-            enteredAmount: enteredAmount,
-            enteredDate: new Date(enteredDate)
+            title: enteredTitle,
+            amount: enteredAmount,
+            date: new Date(enteredDate)
         }
 
         onSaveExpenseData(expenseData);
         setEnteredTitle('');
         setEnteredAmount('');
         setEnteredDate('');
-
-        console.log(expenseData);
     }
 
     return (
