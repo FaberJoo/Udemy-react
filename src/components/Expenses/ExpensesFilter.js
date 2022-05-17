@@ -4,7 +4,6 @@ import './ExpensesFilter.css';
 
 const ExpensesFilter = ({ selected, onChangeFilter }) => {
     const filterChange = (e) => {
-        console.log(e.target.value);
         onChangeFilter(e.target.value);
     }
 
