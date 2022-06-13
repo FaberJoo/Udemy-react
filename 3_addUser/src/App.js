@@ -6,12 +6,12 @@ const users = [
 	{
 		name: 'max',
 		age: '12',
-		id: Math.round(Math.random()).toString(),
+		id: Math.random().toString(),
 	},
 	{
 		name: 'dk',
 		age: '26',
-		id: Math.round(Math.random()).toString(),
+		id: Math.random().toString(),
 	},
 ];
 
@@ -24,7 +24,7 @@ function App() {
 				{
 					name: userName,
 					age: userAge,
-					id: Math.round(Math.random()).toString(),
+					id: Math.random().toString(),
 				},
 				...prevUsers,
 			];
