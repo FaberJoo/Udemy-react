@@ -32,10 +32,10 @@ function App() {
 	};
 
 	return (
-		<div>
+		<>
 			<AddUser onAddUser={onAddUser} />
 			<UsersList users={Users} />
-		</div>
+		</>
 	);
 }
 
