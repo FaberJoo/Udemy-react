@@ -1,34 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
 
 function App() {
-  const dummyMovies = [
-    {
-      id: 1,
-      title: 'Some Dummy Movie',
-      openingText: 'This is the opening text of the movie',
-      releaseDate: '2021-05-18',
-    },
-    {
-      id: 2,
-      title: 'Some Dummy Movie 2',
-      openingText: 'This is the second opening text of the movie',
-      releaseDate: '2021-05-19',
-    },
-  ];
+	const [movies, setMovies] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState(null);
 
-  return (
-    <React.Fragment>
-      <section>
-        <button>Fetch Movies</button>
-      </section>
-      <section>
-        <MoviesList movies={dummyMovies} />
-      </section>
-    </React.Fragment>
-  );
+	const fetchMovieHandler = async () => {
+		setError(null);
+		setIsLoading(true);
+		try {
+			const response = await fetch('https://swapi.dev/api/films/');
+			if (!response.ok) {
+				throw new Error('Something went wrong!');
+			}
+			const data = await response.json();
+
+			const transformedMovies = data.results.map((movie) => {
+				return {
+					title: movie.title,
+					id: movie.episode_id,
+					release: movie.release_date,
+					openingText: movie.opening_crawl,
+				};
+			});
+			setMovies(transformedMovies);
+		} catch (e) {
+			setError(e.message);
+		}
+		setIsLoading(false);
+	};
+
+	let content = <p>Not found Movies</p>;
+
+	if (error) {
+		content = <p>{error}</p>;
+	}
+
+	if (movies.length > 0) {
+		content = <MoviesList movies={movies} />;
+	}
+
+	if (isLoading) {
+		content = <p>Loading...</p>;
+	}
+
+	return (
+		<React.Fragment>
+			<section>
+				<button onClick={fetchMovieHandler}>Fetch Movies</button>
+			</section>
+			<section>{content}</section>
+		</React.Fragment>
+	);
 }
 
 export default App;
