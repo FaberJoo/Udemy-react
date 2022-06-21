@@ -1,37 +1,62 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import MoviesList from './components/MoviesList';
 import './App.css';
+import AddMovie from './components/AddMovie';
 
 function App() {
 	const [movies, setMovies] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
 
-	const fetchMovieHandler = async () => {
+	const fetchMovieHandler = useCallback(async () => {
 		setError(null);
 		setIsLoading(true);
 		try {
-			const response = await fetch('https://swapi.dev/api/films/');
+			// https://swapi.dev/api/films/
+			const response = await fetch(
+				'https://react-http-8ca22-default-rtdb.asia-southeast1.firebasedatabase.app/movie.json',
+			);
 			if (!response.ok) {
 				throw new Error('Something went wrong!');
 			}
 			const data = await response.json();
+			const loadedMovies = [];
 
-			const transformedMovies = data.results.map((movie) => {
-				return {
-					title: movie.title,
-					id: movie.episode_id,
-					release: movie.release_date,
-					openingText: movie.opening_crawl,
-				};
-			});
-			setMovies(transformedMovies);
+			for (const key in data) {
+				loadedMovies.push({
+					id: key,
+					title: data[key].title,
+					releaseDate: data[key].release_date,
+					openingText: data[key].openingText,
+				});
+			}
+
+			setMovies(loadedMovies);
 		} catch (e) {
 			setError(e.message);
 		}
 		setIsLoading(false);
+	}, []);
+
+	const addMovieHandler = async (movie) => {
+		const response = await fetch(
+			'https://react-http-8ca22-default-rtdb.asia-southeast1.firebasedatabase.app/movie.json',
+			{
+				method: 'POST',
+				body: JSON.stringify(movie),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			},
+		);
+		const data = await response.json();
+		console.log(data);
 	};
+
+	useEffect(() => {
+		fetchMovieHandler();
+	}, [fetchMovieHandler]);
 
 	let content = <p>Not found Movies</p>;
 
@@ -49,6 +74,9 @@ function App() {
 
 	return (
 		<React.Fragment>
+			<section>
+				<AddMovie onAddMovie={addMovieHandler} />
+			</section>
 			<section>
 				<button onClick={fetchMovieHandler}>Fetch Movies</button>
 			</section>
